@@ -38,14 +38,13 @@ def predict_price(location, area, bhk, typ):
     return math.exp(model.predict([z])[0])
 
 if st.button("Predict Price"):
-    try:
+    if not location:
+        st.error("Please select a location.")
+    elif area <= 0:
+        st.error("Enter a positive area value.")
+    else:
         prediction = predict_price(location, area, bhk, typ)
         if prediction < 100:
             st.success(f"The predicted price is ₹ {prediction:,.2f} L")
         else:
-            st.success(f"The predicted price is ₹ {prediction/100:,.2f} Cr")
-    except:
-        if location == "":
-            st.warning("Location field is empty")
-        if area <= 0:
-            st.warning("Negative area ? Really ?")
+            st.success(f"The predicted price is ₹ {prediction / 100:,.2f} Cr")
