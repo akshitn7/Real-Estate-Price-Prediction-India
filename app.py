@@ -4,7 +4,6 @@ import numpy as np
 import json
 import math
 
-
 model = pickle.load(open("model.pickle", "rb")) 
 
 st.warning("Predictions will be unrealistic if the inputs are unrealistic.",icon = "🚨")
@@ -21,9 +20,6 @@ location = st.selectbox("Choose Location", Location)
 area = st.number_input("Enter Total Area in sqft.", step = 100)
 bhk = st.number_input("Enter Number of BHK", min_value=1, max_value=10, step=1)
 typ = st.selectbox("Enter Type:", ['House', 'Flat', 'Villa'])
-
-
-
 
 def predict_price(location, area, bhk, typ):
     loc_index = columns['data columns'].index(location)
@@ -42,8 +38,14 @@ def predict_price(location, area, bhk, typ):
     return math.exp(model.predict([z])[0])
 
 if st.button("Predict Price"):
-    prediction = predict_price(location, area, bhk, typ)
-    if prediction < 100:
-        st.success(f"The predicted price is ₹ {prediction:,.2f} L")
-    else:
-        st.success(f"The predicted price is ₹ {prediction/100:,.2f} Cr")
+    try:
+        prediction = predict_price(location, area, bhk, typ)
+        if prediction < 100:
+            st.success(f"The predicted price is ₹ {prediction:,.2f} L")
+        else:
+            st.success(f"The predicted price is ₹ {prediction/100:,.2f} Cr")
+    except:
+        if location == "":
+            st.warning("Location field is empty")
+        if area <= 0:
+            st.warning("Negative area ? Really ?")
