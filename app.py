@@ -17,8 +17,8 @@ Location = columns["data columns"]
 Location = [""]+Location[3:]
 
 location = st.selectbox("Choose Location", Location)
-area = st.number_input("Enter Total Area in sqft.", step = 100)
-bhk = st.number_input("Enter Number of BHK", min_value=1, max_value=10, step=1)
+area = st.number_input("Enter Total Area in sqft.",min_value = 0, step = 100)
+bhk = st.number_input("Enter Number of Rooms (BHK)", min_value=1, max_value=10, step=1)
 typ = st.selectbox("Enter Type:", ['House', 'Flat', 'Villa'])
 
 def predict_price(location, area, bhk, typ):
@@ -41,7 +41,7 @@ if st.button("Predict Price"):
     if not location:
         st.error("Please select a location.")
     elif area <= 0:
-        st.error("Enter a positive area value.")
+        st.error("Enter a proper area value.")
     else:
         prediction = predict_price(location, area, bhk, typ)
         if prediction < 100:
